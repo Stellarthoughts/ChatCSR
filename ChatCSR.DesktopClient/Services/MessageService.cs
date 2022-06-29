@@ -15,7 +15,7 @@ namespace ChatCSR.DesktopClient.Services
 		public event EventHandler<List<string>> OnMessage = null!;
 		public event EventHandler<List<User>> OnUser = null!;
 		public event EventHandler<List<User>> OnUserLeft = null!;
-		public event EventHandler OnConnected = null!;
+		public event EventHandler<List<string>,List<User>> OnConnected = null!;
 		public event EventHandler OnBadConnection = null!;
 		public event EventHandler OnBadMessageSend = null!;
 		#endregion
@@ -44,7 +44,7 @@ namespace ChatCSR.DesktopClient.Services
 			}
 
 			_ = ReceiveMessage();
-			SendMessage(JsonConvert.SerializeObject(username), MessageType.Connection);
+			SendMessage(username, MessageType.Connection);
 		}
 
 		public void SendMessage(string messageInput, MessageType type)
@@ -52,7 +52,7 @@ namespace ChatCSR.DesktopClient.Services
 			if (_user == null)
 				throw new Exception();
 
-			ClientMessage messageObject = new(_user.Name, messageInput, MessageType.Chat);
+			ClientMessage messageObject = new(_user.Name, messageInput, type);
 
 			var jsonMessage = JsonConvert.SerializeObject(messageObject);
 			var bytes = Encoding.UTF8.GetBytes(jsonMessage);
@@ -96,7 +96,7 @@ namespace ChatCSR.DesktopClient.Services
 			{
 				case MessageType.Connection:
 					_user.Id = msg.Users[0].Id;
-					OnConnected.Invoke(this, new());
+					OnConnected.Invoke(this, msg.Content, msg.Users);
 					break;
 				case MessageType.Chat:
 					OnMessage.Invoke(this, msg.Content);

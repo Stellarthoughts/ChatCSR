@@ -20,6 +20,14 @@ namespace ChatCSR.ServerLogic.Handlers
 			//await SendMessageToAllAsync($"{socketId} is now connected");
 		}
 
+		public override async Task OnDisconnected(WebSocket socket)
+		{
+			await SendMessageToAllAsync(Serialize(
+				new ServerMessage(new(), new() { $"User {WebSocketConnectionManager.GetId(socket)} disconnected." }, MessageType.Chat)
+				));
+			await base.OnDisconnected(socket);
+		}
+
 		public override async Task ReceiveAsync(WebSocket socket, WebSocketReceiveResult result, byte[] buffer)
 		{
 			var socketId = WebSocketConnectionManager.GetId(socket);
@@ -32,10 +40,10 @@ namespace ChatCSR.ServerLogic.Handlers
 					User user = new User(msg.Content);
 					user.Id = socketId;
 					await SendMessageAsync(socket, Serialize(
-						new ServerMessage(new() { user }, new() { "welcome" }, MessageType.Connection)
+						new ServerMessage(new() {user}, new() {"welcome"}, MessageType.Connection)
 						));
 					await SendMessageToAllAsync(Serialize(
-						new ServerMessage(new(), new() {$"User {user.Name} is connected."}, MessageType.Chat)
+						new ServerMessage(new(), new() {$"User {user.Name} is connected."}, MessageType.User)
 						));
 					break;
 				case MessageType.Chat:

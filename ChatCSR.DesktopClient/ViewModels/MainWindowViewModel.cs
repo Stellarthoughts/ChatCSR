@@ -4,6 +4,7 @@ using Prism.Commands;
 using Prism.Mvvm;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace ChatCSR.DesktopClient.ViewModels
 {
@@ -17,8 +18,8 @@ namespace ChatCSR.DesktopClient.ViewModels
 
 		private string _messageInput = "";
 
-		private List<string> _messageList = new();
-		private List<string> _userList = new();
+		private ObservableCollection<string> _messageList = new();
+		private ObservableCollection<string> _userList = new();
 
 		private MessageService _messageService;
 		#endregion
@@ -44,12 +45,12 @@ namespace ChatCSR.DesktopClient.ViewModels
 			get => _connectionStatus;
 			set => SetProperty(ref _connectionStatus, value);
 		}
-		public List<string> MessageList
+		public ObservableCollection<string> MessageList
 		{
 			get => _messageList;
 			set => SetProperty(ref _messageList, value);
 		}
-		public List<string> UserList
+		public ObservableCollection<string> UserList
 		{
 			get => _userList;
 			set => SetProperty(ref _userList, value);
@@ -101,7 +102,7 @@ namespace ChatCSR.DesktopClient.ViewModels
 			messages.ForEach(x => MessageList.Add(x));
 		}
 
-		private void OnConnected(object? sender, EventArgs e)
+		private void OnConnected(object? sender, List<string> messages, List<User> users)
 		{
 			ConnectionStatus = "Connection established";
 		}
