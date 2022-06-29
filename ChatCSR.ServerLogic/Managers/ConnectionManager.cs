@@ -1,49 +1,44 @@
-﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Concurrent;
 using System.Net.WebSockets;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ChatCSR.ServerLogic.Managers
 {
 	public class ConnectionManager
 	{
-        private ConcurrentDictionary<string, WebSocket> _sockets = new ConcurrentDictionary<string, WebSocket>();
+		private ConcurrentDictionary<string, WebSocket> _sockets = new ConcurrentDictionary<string, WebSocket>();
 
-        public WebSocket GetSocketById(string id)
-        {
-            return _sockets.FirstOrDefault(p => p.Key == id).Value;
-        }
+		public WebSocket GetSocketById(string id)
+		{
+			return _sockets.FirstOrDefault(p => p.Key == id).Value;
+		}
 
-        public ConcurrentDictionary<string, WebSocket> GetAll()
-        {
-            return _sockets;
-        }
+		public ConcurrentDictionary<string, WebSocket> GetAll()
+		{
+			return _sockets;
+		}
 
-        public string GetId(WebSocket socket)
-        {
-            return _sockets.FirstOrDefault(p => p.Value == socket).Key;
-        }
-        public void AddSocket(WebSocket socket)
-        {
-            _sockets.TryAdd(CreateConnectionId(), socket);
-        }
+		public string GetId(WebSocket socket)
+		{
+			return _sockets.FirstOrDefault(p => p.Value == socket).Key;
+		}
+		public void AddSocket(WebSocket socket)
+		{
+			_sockets.TryAdd(CreateConnectionId(), socket);
+		}
 
-        public async Task RemoveSocket(string id)
-        {
-            WebSocket socket;
-            _sockets.TryRemove(id, out socket!);
+		public async Task RemoveSocket(string id)
+		{
+			WebSocket socket;
+			_sockets.TryRemove(id, out socket!);
 
-            await socket.CloseAsync(closeStatus: WebSocketCloseStatus.NormalClosure,
-                                    statusDescription: "Closed by the ConnectionManager",
-                                    cancellationToken: CancellationToken.None);
-        }
+			await socket.CloseAsync(closeStatus: WebSocketCloseStatus.NormalClosure,
+									statusDescription: "Closed by the ConnectionManager",
+									cancellationToken: CancellationToken.None);
+		}
 
-        private string CreateConnectionId()
-        {
-            return Guid.NewGuid().ToString();
-        }
-    }
+		private string CreateConnectionId()
+		{
+			return Guid.NewGuid().ToString();
+		}
+	}
 }

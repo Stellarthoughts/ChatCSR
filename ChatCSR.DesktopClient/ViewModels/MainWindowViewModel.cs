@@ -4,9 +4,6 @@ using Prism.Commands;
 using Prism.Mvvm;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ChatCSR.DesktopClient.ViewModels
 {
@@ -23,7 +20,7 @@ namespace ChatCSR.DesktopClient.ViewModels
 		private List<string> _messageList = new();
 		private List<string> _userList = new();
 
-		private MessageService _messageService; 
+		private MessageService _messageService;
 		#endregion
 
 		#region Properties
@@ -65,7 +62,7 @@ namespace ChatCSR.DesktopClient.ViewModels
 		#endregion
 
 		#region Commands
-		public DelegateCommand SendMessageCommand { get; private set; } 
+		public DelegateCommand SendMessageCommand { get; private set; }
 		public DelegateCommand ConnectCommand { get; private set; }
 		#endregion
 

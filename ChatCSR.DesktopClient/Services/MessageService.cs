@@ -30,19 +30,21 @@ namespace ChatCSR.DesktopClient.Services
 		public async void Connect(string ip, string port, string username)
 		{
 			_user = new(username);
+
 			_clientWebSocket = new();
 			try
 			{
 				await _clientWebSocket.ConnectAsync(new Uri($"{ip}:{port}/{_api}"), CancellationToken.None);
+				OnConnected.Invoke(this, new());
 			}
-			catch(WebSocketException)
+			catch (WebSocketException)
 			{
 				OnBadConnection.Invoke(this, new());
 				return;
 			}
-			
+
 			_ = ReceiveMessage();
-			SendMessage(JsonConvert.SerializeObject(_user), MessageType.Connection);
+			SendMessage(JsonConvert.SerializeObject(username), MessageType.Connection);
 		}
 
 		public void SendMessage(string messageInput, MessageType type)
@@ -58,7 +60,7 @@ namespace ChatCSR.DesktopClient.Services
 			{
 				_clientWebSocket.SendAsync(new ArraySegment<byte>(bytes), WebSocketMessageType.Text, true, CancellationToken.None);
 			}
-			catch (Exception ex)
+			catch (Exception)
 			{
 				OnBadMessageSend.Invoke(this, new());
 			}
@@ -83,13 +85,18 @@ namespace ChatCSR.DesktopClient.Services
 		private void InterpretMessage(string message)
 		{
 			ServerMessage? msg = JsonConvert.DeserializeObject<ServerMessage>(message);
+
 			if (msg == null)
 				throw new Exception();
 
-			switch(msg.Type)
+			if (_user == null)
+				throw new Exception();
+
+			switch (msg.Type)
 			{
 				case MessageType.Connection:
-					OnConnected.Invoke(this,new());
+					_user.Id = msg.Users[0].Id;
+					OnConnected.Invoke(this, new());
 					break;
 				case MessageType.Chat:
 					OnMessage.Invoke(this, msg.Content);
