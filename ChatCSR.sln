@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChatCSR.Core", "ChatCSR.Cor
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChatCSR.ServerLogic", "ChatCSR.ServerLogic\ChatCSR.ServerLogic.csproj", "{77430C32-C2F6-4CF4-BCFB-AA2F2B267147}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatCSR.WebServer", "ChatCSR.WebServer\ChatCSR.WebServer.csproj", "{DC8E2A28-D31E-4BB6-BFFB-9831890C5131}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChatCSR.WebServer", "ChatCSR.WebServer\ChatCSR.WebServer.csproj", "{DC8E2A28-D31E-4BB6-BFFB-9831890C5131}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatCSR.ServiceServer", "ServiceServer\ChatCSR.ServiceServer.csproj", "{277227DF-E3C7-4733-9E56-E5BB5539427C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{DC8E2A28-D31E-4BB6-BFFB-9831890C5131}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DC8E2A28-D31E-4BB6-BFFB-9831890C5131}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DC8E2A28-D31E-4BB6-BFFB-9831890C5131}.Release|Any CPU.Build.0 = Release|Any CPU
+		{277227DF-E3C7-4733-9E56-E5BB5539427C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{277227DF-E3C7-4733-9E56-E5BB5539427C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{277227DF-E3C7-4733-9E56-E5BB5539427C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{277227DF-E3C7-4733-9E56-E5BB5539427C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

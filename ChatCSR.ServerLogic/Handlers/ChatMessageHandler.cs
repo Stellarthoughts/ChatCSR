@@ -11,6 +11,7 @@ namespace ChatCSR.ServerLogic.Handlers
 	public class ChatMessageHandler : WebSocketHandler
 	{
 		private Repository _repository;
+
 		public ChatMessageHandler(ConnectionManager webSocketConnectionManager) : base(webSocketConnectionManager)
 		{
 			_repository = new();
