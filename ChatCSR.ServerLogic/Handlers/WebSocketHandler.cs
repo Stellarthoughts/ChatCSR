@@ -52,6 +52,12 @@ namespace ChatCSR.ServerLogic.Handlers
 			}
 		}
 
+		public async Task SendMessageToGroup(List<WebSocket> sockets, string message)
+		{
+			foreach (var socket in sockets)
+				await SendMessageAsync(socket, message);
+		}
+
 		public abstract Task ReceiveAsync(WebSocket socket, WebSocketReceiveResult result, byte[] buffer);
 	}
 }

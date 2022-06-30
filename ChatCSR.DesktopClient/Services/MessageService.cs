@@ -12,9 +12,10 @@ namespace ChatCSR.DesktopClient.Services
 	public class MessageService
 	{
 		#region Events
-		public event EventHandler<List<string>> OnMessage = null!;
+		public event EventHandler<List<MessageEntity>> OnMessage = null!;
 		public event EventHandler<List<User>> OnUser = null!;
 		public event EventHandler<List<User>> OnUserLeft = null!;
+		public event EventHandler<List<User>> OnNewUser = null!;
 		public event EventHandler OnConnected = null!;
 		public event EventHandler OnBadConnection = null!;
 		public event EventHandler OnBadMessageSend = null!;
@@ -23,15 +24,14 @@ namespace ChatCSR.DesktopClient.Services
 		#region Fields
 		private string _api = "message";
 		private ClientWebSocket _clientWebSocket = null!;
-		private User? _user;
+		private string? _username;
 		#endregion
 
 		#region Methods
 		public async void Connect(string ip, string port, string username)
 		{
 			await Disconnect();
-
-			_user = new(username);
+			_username = null;
 
 			_clientWebSocket = new();
 			try
@@ -45,6 +45,7 @@ namespace ChatCSR.DesktopClient.Services
 				return;
 			}
 
+			_username = username;
 			_ = ReceiveMessage();
 			SendMessage(username, MessageType.Connection);
 		}
@@ -59,10 +60,10 @@ namespace ChatCSR.DesktopClient.Services
 
 		public void SendMessage(string messageInput, MessageType type)
 		{
-			if (_user == null)
-				throw new Exception();
+			if (_username == null)
+				return;
 
-			ClientMessage messageObject = new(_user.Name, messageInput, type);
+			ClientMessage messageObject = new(_username, messageInput, type);
 
 			var jsonMessage = JsonConvert.SerializeObject(messageObject);
 			var bytes = Encoding.UTF8.GetBytes(jsonMessage);
@@ -111,7 +112,7 @@ namespace ChatCSR.DesktopClient.Services
 					OnMessage.Invoke(this, msg.Content);
 					break;
 				case MessageType.User:
-					OnUser.Invoke(this, msg.Users);
+					OnNewUser.Invoke(this, msg.Users);
 					break;
 				case MessageType.UserLeft:
 					OnUserLeft.Invoke(this, msg.Users);

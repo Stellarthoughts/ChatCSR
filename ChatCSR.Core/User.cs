@@ -2,13 +2,7 @@
 {
 	public class User
 	{
-		public string Id { get; set; }
-		public string Name { get; set; }
-
-		public User(string name)
-		{
-			Name = name;
-			Id = "0";
-		}
+		public string? Id { get; set; }
+		public string? Name { get; set; }
 	}
 }

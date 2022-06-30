@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace ChatCSR.ServerLogic.DB
+namespace ChatCSR.Core
 {
 	[Table("Message")]
 	public class MessageEntity
@@ -18,10 +13,19 @@ namespace ChatCSR.ServerLogic.DB
 		[Required]
 		[MaxLength(256)]
 		public string Content { get; set; }
-		
-		public MessageEntity(string content)
+
+		[Required]
+		[MaxLength(256)]
+		public string Sender { get; set; }
+
+		[Required]
+		public DateTime Time { get; set; }
+
+		public MessageEntity(string content, string sender)
 		{
 			Content = content;
+			Sender = sender;
+			Time = DateTime.Now;
 		}
 	}
 }

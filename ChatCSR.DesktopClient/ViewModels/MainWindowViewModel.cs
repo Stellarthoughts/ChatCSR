@@ -84,6 +84,7 @@ namespace ChatCSR.DesktopClient.ViewModels
 			_messageService.OnBadMessageSend += OnBadMessageSend;
 			_messageService.OnUser += OnUser;
 			_messageService.OnUserLeft += OnUserLeft;
+			_messageService.OnNewUser += OnNewUser;
 		}
 		#endregion
 		
@@ -101,19 +102,30 @@ namespace ChatCSR.DesktopClient.ViewModels
 			_messageService.Connect(ServerIP, ServerPort, Username);
 		}
 
-		private void OnMessage(object? sender, List<string> messages)
+		private void OnMessage(object? sender, List<MessageEntity> messages)
 		{
-			messages.ForEach(x => MessageList.Add(x));
+			messages.Sort((a, b) => a.Time > b.Time ? 1 : -1);
+			messages.ForEach(x => MessageList.Add($"{x.Sender}: {x.Content}"));
 		}
 
 		private void OnUser(object? sender, List<User> users)
 		{
-			users.ForEach(x => UserList.Add(x.Name));
+			users.ForEach(x => {
+				UserList.Add(x.Name!);
+				});
+		}
+
+		private void OnNewUser(object? sender, List<User> users)
+		{
+			users.ForEach(x => {
+				UserList.Add(x.Name!);
+				MessageList.Add($"{x.Name} entered the chat.");
+			});
 		}
 
 		private void OnUserLeft(object? sender, List<User> users)
 		{
-			users.ForEach(x => UserList.Remove(x.Name));
+			users.ForEach(x => UserList.Remove(x.Name!));
 		}
 
 		private void OnConnected(object? sender, EventArgs args)
