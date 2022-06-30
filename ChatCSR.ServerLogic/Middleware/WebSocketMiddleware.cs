@@ -47,10 +47,17 @@ namespace ChatCSR.ServerLogic.Middleware
 
 			while (socket.State == WebSocketState.Open)
 			{
-				var result = await socket.ReceiveAsync(buffer: new ArraySegment<byte>(buffer),
+				try
+				{
+					var result = await socket.ReceiveAsync(buffer: new ArraySegment<byte>(buffer),
 														cancellationToken: CancellationToken.None);
-
-				handleMessage(result, buffer);
+					handleMessage(result, buffer);
+				}
+				catch(WebSocketException)
+				{
+					await _webSocketHandler.OnDisconnected(socket);
+					break;
+				}	
 			}
 		}
 	}

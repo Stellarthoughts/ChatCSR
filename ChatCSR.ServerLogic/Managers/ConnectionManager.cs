@@ -1,4 +1,5 @@
-﻿using System.Collections.Concurrent;
+﻿using ChatCSR.Core;
+using System.Collections.Concurrent;
 using System.Net.WebSockets;
 
 namespace ChatCSR.ServerLogic.Managers
@@ -31,9 +32,12 @@ namespace ChatCSR.ServerLogic.Managers
 			WebSocket socket;
 			_sockets.TryRemove(id, out socket!);
 
-			await socket.CloseAsync(closeStatus: WebSocketCloseStatus.NormalClosure,
+			if(socket.State == WebSocketState.Open)
+			{
+				await socket.CloseAsync(closeStatus: WebSocketCloseStatus.NormalClosure,
 									statusDescription: "Closed by the ConnectionManager",
 									cancellationToken: CancellationToken.None);
+			}
 		}
 
 		private string CreateConnectionId()

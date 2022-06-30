@@ -15,7 +15,7 @@ namespace ChatCSR.DesktopClient.Services
 		public event EventHandler<List<string>> OnMessage = null!;
 		public event EventHandler<List<User>> OnUser = null!;
 		public event EventHandler<List<User>> OnUserLeft = null!;
-		public event EventHandler<List<string>,List<User>> OnConnected = null!;
+		public event EventHandler OnConnected = null!;
 		public event EventHandler OnBadConnection = null!;
 		public event EventHandler OnBadMessageSend = null!;
 		#endregion
@@ -29,6 +29,8 @@ namespace ChatCSR.DesktopClient.Services
 		#region Methods
 		public async void Connect(string ip, string port, string username)
 		{
+			await Disconnect();
+
 			_user = new(username);
 
 			_clientWebSocket = new();
@@ -45,6 +47,14 @@ namespace ChatCSR.DesktopClient.Services
 
 			_ = ReceiveMessage();
 			SendMessage(username, MessageType.Connection);
+		}
+
+		public async Task Disconnect()
+		{
+			if (_clientWebSocket == null)
+				return;
+			if(_clientWebSocket.State == WebSocketState.Open)
+				await _clientWebSocket.CloseOutputAsync(WebSocketCloseStatus.NormalClosure, "", CancellationToken.None);
 		}
 
 		public void SendMessage(string messageInput, MessageType type)
@@ -82,6 +92,7 @@ namespace ChatCSR.DesktopClient.Services
 				InterpretMessage(jsonMessage);
 			}
 		}
+
 		private void InterpretMessage(string message)
 		{
 			ServerMessage? msg = JsonConvert.DeserializeObject<ServerMessage>(message);
@@ -89,14 +100,12 @@ namespace ChatCSR.DesktopClient.Services
 			if (msg == null)
 				throw new Exception();
 
-			if (_user == null)
-				throw new Exception();
-
 			switch (msg.Type)
 			{
 				case MessageType.Connection:
-					_user.Id = msg.Users[0].Id;
-					OnConnected.Invoke(this, msg.Content, msg.Users);
+					OnConnected.Invoke(this, new());
+					OnMessage.Invoke(this, msg.Content);
+					OnUser.Invoke(this, msg.Users);
 					break;
 				case MessageType.Chat:
 					OnMessage.Invoke(this, msg.Content);

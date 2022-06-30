@@ -82,9 +82,11 @@ namespace ChatCSR.DesktopClient.ViewModels
 			_messageService.OnConnected += OnConnected;
 			_messageService.OnBadConnection += OnBadConnection;
 			_messageService.OnBadMessageSend += OnBadMessageSend;
+			_messageService.OnUser += OnUser;
+			_messageService.OnUserLeft += OnUserLeft;
 		}
 		#endregion
-
+		
 		#region Methods
 		private void SendMessage()
 		{
@@ -93,6 +95,8 @@ namespace ChatCSR.DesktopClient.ViewModels
 
 		private void Connect()
 		{
+			MessageList.Clear();
+			UserList.Clear();
 			ConnectionStatus = "Connecting...";
 			_messageService.Connect(ServerIP, ServerPort, Username);
 		}
@@ -102,7 +106,17 @@ namespace ChatCSR.DesktopClient.ViewModels
 			messages.ForEach(x => MessageList.Add(x));
 		}
 
-		private void OnConnected(object? sender, List<string> messages, List<User> users)
+		private void OnUser(object? sender, List<User> users)
+		{
+			users.ForEach(x => UserList.Add(x.Name));
+		}
+
+		private void OnUserLeft(object? sender, List<User> users)
+		{
+			users.ForEach(x => UserList.Remove(x.Name));
+		}
+
+		private void OnConnected(object? sender, EventArgs args)
 		{
 			ConnectionStatus = "Connection established";
 		}
