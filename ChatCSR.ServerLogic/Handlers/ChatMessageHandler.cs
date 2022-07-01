@@ -57,7 +57,7 @@ namespace ChatCSR.ServerLogic.Handlers
 			}
 		}
 
-		private async Task Reply(WebSocket socket, ClientMessage message)
+		public async Task Reply(WebSocket socket, ClientMessage message)
 		{
 			_users.TryGetValue(socket, out User? user);
 			if (user == null)

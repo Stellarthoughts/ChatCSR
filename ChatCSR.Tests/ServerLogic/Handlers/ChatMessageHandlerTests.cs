@@ -35,11 +35,9 @@ namespace ChatCSR.Tests.ServerLogic.Handlers
 
 			await _handler.OnConnected(_webSocket.Object);
 
-			var handlerType = typeof(ChatMessageHandler);
-			var fields = handlerType.GetFields(BindingFlags.NonPublic
-			| BindingFlags.Instance);
-			var field = fields.First(x => x.Name == "_users");
-			var dic = (ConcurrentDictionary<WebSocket, User>)field.GetValue(_handler)!;
+			var dic = Reflection.GetObjectInFiled<ConcurrentDictionary<WebSocket, User>, ChatMessageHandler>(
+				_handler, "_users", BindingFlags.NonPublic | BindingFlags.Instance);
+
 			Assert.That(dic.Count > 0);
 
 			await _handler.OnDisconnected(_webSocket.Object);
@@ -54,11 +52,9 @@ namespace ChatCSR.Tests.ServerLogic.Handlers
 
 			await _handler.OnConnected(_webSocket.Object);
 
-			var handlerType = typeof(WebSocketHandler);
-			var fields = handlerType.GetFields(BindingFlags.NonPublic
-			| BindingFlags.Instance);
-			var field = fields.First(x => x.Name == "<WebSocketConnectionManager>k__BackingField");
-			var cm = (ConnectionManager)field.GetValue(_handler)!;
+			var cm = Reflection.GetObjectInFiled<ConnectionManager,WebSocketHandler>(
+				_handler, "<WebSocketConnectionManager>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance);
+
 			Assert.That(cm.GetAll().Count > 0);
 
 			await _handler.OnDisconnected(_webSocket.Object);
@@ -67,18 +63,17 @@ namespace ChatCSR.Tests.ServerLogic.Handlers
 		}
 
 		[Test]
-		public async Task Reply_()
+		public async Task Reply_DoesNotThrowReplying()
 		{
 			_webSocket.Setup(x => x.State).Returns(WebSocketState.Open);
 
 			await _handler.OnConnected(_webSocket.Object);
 
-			var handlerType = typeof(WebSocketHandler);
-			var fields = handlerType.GetFields(BindingFlags.NonPublic
-			| BindingFlags.Instance);
-			var field = fields.First(x => x.Name == "<WebSocketConnectionManager>k__BackingField");
-			var cm = (ConnectionManager)field.GetValue(_handler)!;
-			Assert.That(cm.GetAll().Count > 0);
+			Assert.DoesNotThrowAsync(async () =>
+			{
+				await _handler.Reply(_webSocket.Object, new("username", null!, MessageType.Connection));
+				await _handler.Reply(_webSocket.Object, new("username", "hello", MessageType.Chat));
+			});
 
 			await _handler.OnDisconnected(_webSocket.Object);
 		}
