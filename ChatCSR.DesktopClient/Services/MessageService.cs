@@ -22,7 +22,7 @@ namespace ChatCSR.DesktopClient.Services
 		#endregion
 
 		#region Fields
-		private string _api = "message";
+		private readonly string _api = "message";
 		private ClientWebSocket _clientWebSocket = null!;
 		private string? _username;
 		#endregion

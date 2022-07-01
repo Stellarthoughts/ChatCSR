@@ -5,7 +5,7 @@ namespace ChatCSR.ServerLogic.Managers
 {
 	public class ConnectionManager
 	{
-		private ConcurrentDictionary<string, WebSocket> _sockets = new ConcurrentDictionary<string, WebSocket>();
+		private readonly ConcurrentDictionary<string, WebSocket> _sockets = new ConcurrentDictionary<string, WebSocket>();
 
 		public WebSocket GetSocketById(string id)
 		{

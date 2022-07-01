@@ -10,14 +10,13 @@ namespace ChatCSR.ServerLogic.Handlers
 {
 	public class ChatMessageHandler : WebSocketHandler
 	{
-		private Repository _repository;
-		private ConcurrentDictionary<WebSocket, User> _users;
+		private readonly Repository _repository;
+		private readonly ConcurrentDictionary<WebSocket, User> _users;
 
-		public ChatMessageHandler(ConnectionManager webSocketConnectionManager) : base(webSocketConnectionManager)
+		public ChatMessageHandler(ConnectionManager webSocketConnectionManager, IRepository repository = null!) : base(webSocketConnectionManager)
 		{
 			_users = new();
-			_repository = new();
-			DBContextSeeder.Seed(_repository);
+			_repository ??= new Repository();
 		}
 
 		public override async Task OnConnected(WebSocket socket)
@@ -25,7 +24,7 @@ namespace ChatCSR.ServerLogic.Handlers
 			await base.OnConnected(socket);
 
 			User user = new User();
-			user.Id = new Guid().ToString();
+			user.Id = Guid.NewGuid().ToString();
 			_users.TryAdd(socket, user);
 		}
 

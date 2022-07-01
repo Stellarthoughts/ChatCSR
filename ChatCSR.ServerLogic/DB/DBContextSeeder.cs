@@ -2,7 +2,7 @@
 {
 	public static class DBContextSeeder
 	{
-		public static void Seed(Repository context)
+		public static void Seed(ChatContext context)
 		{
 			context.Database.EnsureDeleted();
 			context.Database.EnsureCreated();

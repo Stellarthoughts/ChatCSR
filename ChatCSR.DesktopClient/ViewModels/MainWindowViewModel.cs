@@ -21,7 +21,7 @@ namespace ChatCSR.DesktopClient.ViewModels
 		private ObservableCollection<string> _messageList = new();
 		private ObservableCollection<string> _userList = new();
 
-		private MessageService _messageService;
+		private readonly MessageService _messageService;
 		#endregion
 
 		#region Properties
