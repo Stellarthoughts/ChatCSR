@@ -16,5 +16,30 @@ namespace ChatCSR.Tests
 			var field = fields.First(x => x.Name == name);
 			return (T) field.GetValue(parent)!;
 		}
+
+		public static T CallPrivateMethod<T>(
+			this object instance,
+			string methodName,
+			BindingFlags flags,
+			params object[] parameters
+			)
+		{
+			Type type = instance.GetType();
+			MethodInfo method = type.GetMethod(methodName, flags)!;
+
+			return (T) method.Invoke(instance, parameters)!;
+		}
+
+		public static void CallPrivateMethodVoid(
+			this object instance,
+			string methodName,
+			BindingFlags flags,
+			params object[] parameters
+			)
+		{
+			Type type = instance.GetType();
+			MethodInfo method = type.GetMethod(methodName, flags)!;
+			method.Invoke(instance, parameters);
+		}
 	}
 }
