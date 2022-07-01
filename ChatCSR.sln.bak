@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChatCSR.ServerLogic", "Chat
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChatCSR.WebServer", "ChatCSR.WebServer\ChatCSR.WebServer.csproj", "{DC8E2A28-D31E-4BB6-BFFB-9831890C5131}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChatCSR.ServiceServer", "ChatCSR.ServiceServer\ChatCSR.ServiceServer.csproj", "{277227DF-E3C7-4733-9E56-E5BB5539427C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChatCSR.ServiceServer", "ServiceServer\ChatCSR.ServiceServer.csproj", "{277227DF-E3C7-4733-9E56-E5BB5539427C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatCSR.Tests", "ChatCSR.Tests\ChatCSR.Tests.csproj", "{34A68243-341E-4138-B72C-CD43FEAE6A47}"
 EndProject

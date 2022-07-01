@@ -29,7 +29,7 @@ namespace ChatCSR.Tests.ServerLogic.Handlers
 		}
 
 		[Test]
-		public async Task OnConnected_UserGetsAdded()
+		public async Task OnConnected_UserGetsAddedAndDeleted()
 		{
 			_webSocket.Setup(x => x.State).Returns(WebSocketState.Open);
 
@@ -43,10 +43,12 @@ namespace ChatCSR.Tests.ServerLogic.Handlers
 			Assert.That(dic.Count > 0);
 
 			await _handler.OnDisconnected(_webSocket.Object);
+
+			Assert.That(dic.Count == 0);
 		}
 
 		[Test]
-		public async Task OnConnected_SocketGetsAdded()
+		public async Task OnConnected_SocketGetsAddedAndDeleted()
 		{
 			_webSocket.Setup(x => x.State).Returns(WebSocketState.Open);
 
@@ -60,6 +62,8 @@ namespace ChatCSR.Tests.ServerLogic.Handlers
 			Assert.That(cm.GetAll().Count > 0);
 
 			await _handler.OnDisconnected(_webSocket.Object);
+
+			Assert.That(cm.GetAll().Count == 0);
 		}
 
 		[Test]

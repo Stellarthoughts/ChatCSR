@@ -7,7 +7,6 @@ namespace ChatCSR.ServerLogic.DB
 	public class Repository : IRepository
 	{
 		private readonly ChatContext _chatContext = null!;
-		private readonly bool _disposed = false;
 
 		public Repository(IServiceProvider serviceProvider)
 		{
@@ -15,7 +14,6 @@ namespace ChatCSR.ServerLogic.DB
 				serviceProvider.GetRequiredService<DbContextOptions<ChatContext>>());
 			_chatContext = context;
 			DBContextSeeder.Seed(_chatContext);
-			_disposed = false;
 		}
 
 		public ChatContext GetContext() => _chatContext;
