@@ -87,7 +87,7 @@ namespace ChatCSR.DesktopClient.ViewModels
 			_messageService.OnNewUser += OnNewUser;
 		}
 		#endregion
-		
+
 		#region Methods
 		private void SendMessage()
 		{
@@ -110,14 +110,16 @@ namespace ChatCSR.DesktopClient.ViewModels
 
 		private void OnUser(object? sender, List<User> users)
 		{
-			users.ForEach(x => {
+			users.ForEach(x =>
+			{
 				UserList.Add(x.Name!);
-				});
+			});
 		}
 
 		private void OnNewUser(object? sender, List<User> users)
 		{
-			users.ForEach(x => {
+			users.ForEach(x =>
+			{
 				UserList.Add(x.Name!);
 				MessageList.Add($"{x.Name} entered the chat.");
 			});

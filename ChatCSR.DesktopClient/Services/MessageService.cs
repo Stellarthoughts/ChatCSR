@@ -54,7 +54,7 @@ namespace ChatCSR.DesktopClient.Services
 		{
 			if (_clientWebSocket == null)
 				return;
-			if(_clientWebSocket.State == WebSocketState.Open)
+			if (_clientWebSocket.State == WebSocketState.Open)
 				await _clientWebSocket.CloseOutputAsync(WebSocketCloseStatus.NormalClosure, "", CancellationToken.None);
 		}
 

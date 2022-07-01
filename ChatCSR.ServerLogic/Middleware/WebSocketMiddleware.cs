@@ -53,11 +53,11 @@ namespace ChatCSR.ServerLogic.Middleware
 														cancellationToken: CancellationToken.None);
 					handleMessage(result, buffer);
 				}
-				catch(WebSocketException)
+				catch (WebSocketException)
 				{
 					await _webSocketHandler.OnDisconnected(socket);
 					break;
-				}	
+				}
 			}
 		}
 	}

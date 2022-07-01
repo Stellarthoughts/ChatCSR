@@ -1,6 +1,4 @@
-﻿using ChatCSR.Core;
-using ChatCSR.ServerLogic.Managers;
-using Newtonsoft.Json;
+﻿using ChatCSR.ServerLogic.Managers;
 using System.Net.WebSockets;
 using System.Text;
 

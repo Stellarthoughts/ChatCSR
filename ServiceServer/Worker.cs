@@ -16,13 +16,13 @@ namespace ServiceServer
 		protected override async Task ExecuteAsync(CancellationToken stoppingToken)
 
 		{
-			if(_processInfo != null)
+			if (_processInfo != null)
 				_process = Process.Start(_processInfo);
 		}
 
 		public override async Task StopAsync(CancellationToken stoppingToken)
 		{
-			if(_process != null)
+			if (_process != null)
 				_process.Kill();
 			_process = null;
 			_processInfo = null;

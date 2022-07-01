@@ -1,11 +1,10 @@
 ﻿using ChatCSR.Core;
+using ChatCSR.ServerLogic.DB;
 using ChatCSR.ServerLogic.Managers;
 using Newtonsoft.Json;
+using System.Collections.Concurrent;
 using System.Net.WebSockets;
 using System.Text;
-using System.Linq;
-using ChatCSR.ServerLogic.DB;
-using System.Collections.Concurrent;
 
 namespace ChatCSR.ServerLogic.Handlers
 {
@@ -37,7 +36,7 @@ namespace ChatCSR.ServerLogic.Handlers
 				return;
 
 			await SendMessageToAllAsync(Serialize(
-				new ServerMessage(new() {user}, new() {}, MessageType.UserLeft)
+				new ServerMessage(new() { user }, new() { }, MessageType.UserLeft)
 				));
 
 			await base.OnDisconnected(socket);
@@ -52,13 +51,13 @@ namespace ChatCSR.ServerLogic.Handlers
 
 		private void HandleDB(ClientMessage message)
 		{
-			if(message.Type == MessageType.Chat)
+			if (message.Type == MessageType.Chat)
 			{
-				_repository.Insert(new(message.Content,message.Sender));
+				_repository.Insert(new(message.Content, message.Sender));
 				_repository.Save();
 			}
 		}
-		
+
 		private async Task Reply(WebSocket socket, ClientMessage message)
 		{
 			_users.TryGetValue(socket, out User? user);
@@ -76,12 +75,12 @@ namespace ChatCSR.ServerLogic.Handlers
 						));
 					await SendMessageToGroup(
 						WebSocketConnectionManager.GetAll().Select(x => x.Value).Where(x => x != socket).ToList(),
-						Serialize(new ServerMessage(new() {user}, new(), MessageType.User))
+						Serialize(new ServerMessage(new() { user }, new(), MessageType.User))
 						);
 					break;
 				case MessageType.Chat:
 					await SendMessageToAllAsync(
-						Serialize(new ServerMessage(new(), new() {new(message.Content,message.Sender)}, MessageType.Chat))
+						Serialize(new ServerMessage(new(), new() { new(message.Content, message.Sender) }, MessageType.Chat))
 						);
 					break;
 			}

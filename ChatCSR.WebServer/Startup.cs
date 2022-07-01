@@ -21,5 +21,6 @@ namespace ChatCSR.WebServer
 			app.MapWebSocketManager("/message", serviceProvider.GetService<ChatMessageHandler>()!);
 			app.UseStaticFiles();
 		}
+
 	}
 }
