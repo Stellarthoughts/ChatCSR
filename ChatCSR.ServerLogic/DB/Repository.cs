@@ -6,8 +6,8 @@ namespace ChatCSR.ServerLogic.DB
 {
 	public class Repository : IRepository
 	{
-		private ChatContext _chatContext = null!;
-		private bool _disposed;
+		private readonly ChatContext _chatContext = null!;
+		private readonly bool _disposed = false;
 
 		public Repository(IServiceProvider serviceProvider)
 		{
@@ -48,6 +48,6 @@ namespace ChatCSR.ServerLogic.DB
 			Messages.Remove(msg);
 		}
 
-		public async Task Save() => _chatContext.SaveChanges();
+		public async Task Save() => await _chatContext.SaveChangesAsync();
 	}
 }

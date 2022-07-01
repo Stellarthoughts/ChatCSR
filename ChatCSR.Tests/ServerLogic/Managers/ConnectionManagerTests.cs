@@ -1,11 +1,6 @@
 ﻿using Moq;
 using NUnit.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.WebSockets;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ChatCSR.Tests.ServerLogic.Managers
 {
@@ -20,6 +15,9 @@ namespace ChatCSR.Tests.ServerLogic.Managers
 		}
 
 		[Test]
-		public void 
+		public void Test()
+		{
+
+		}
 	}
 }

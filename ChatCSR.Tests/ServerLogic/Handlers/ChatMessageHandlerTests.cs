@@ -4,13 +4,10 @@ using ChatCSR.ServerLogic.Handlers;
 using ChatCSR.ServerLogic.Managers;
 using Moq;
 using NUnit.Framework;
-using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net.WebSockets;
 using System.Reflection;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace ChatCSR.Tests.ServerLogic.Handlers
@@ -59,7 +56,24 @@ namespace ChatCSR.Tests.ServerLogic.Handlers
 			var fields = handlerType.GetFields(BindingFlags.NonPublic
 			| BindingFlags.Instance);
 			var field = fields.First(x => x.Name == "<WebSocketConnectionManager>k__BackingField");
-			var cm = (ConnectionManager) field.GetValue(_handler)!;
+			var cm = (ConnectionManager)field.GetValue(_handler)!;
+			Assert.That(cm.GetAll().Count > 0);
+
+			await _handler.OnDisconnected(_webSocket.Object);
+		}
+
+		[Test]
+		public async Task Reply_()
+		{
+			_webSocket.Setup(x => x.State).Returns(WebSocketState.Open);
+
+			await _handler.OnConnected(_webSocket.Object);
+
+			var handlerType = typeof(WebSocketHandler);
+			var fields = handlerType.GetFields(BindingFlags.NonPublic
+			| BindingFlags.Instance);
+			var field = fields.First(x => x.Name == "<WebSocketConnectionManager>k__BackingField");
+			var cm = (ConnectionManager)field.GetValue(_handler)!;
 			Assert.That(cm.GetAll().Count > 0);
 
 			await _handler.OnDisconnected(_webSocket.Object);
