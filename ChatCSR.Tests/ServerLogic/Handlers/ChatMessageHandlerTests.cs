@@ -9,6 +9,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.WebSockets;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -18,7 +19,7 @@ namespace ChatCSR.Tests.ServerLogic.Handlers
 	{
 		private Mock<WebSocket> _webSocket = null!;
 		private Mock<ConnectionManager> _connectionManager = null!;
-		private Mock<Repository> _repository = null!;
+		private Mock<IRepository> _repository = null!;
 		private ChatMessageHandler _handler = null!;
 
 		[SetUp]
@@ -31,9 +32,37 @@ namespace ChatCSR.Tests.ServerLogic.Handlers
 		}
 
 		[Test]
-		public void TestReply()
+		public async Task OnConnected_UserGetsAdded()
 		{
-			Assert.Pass();
+			_webSocket.Setup(x => x.State).Returns(WebSocketState.Open);
+
+			await _handler.OnConnected(_webSocket.Object);
+
+			var handlerType = typeof(ChatMessageHandler);
+			var fields = handlerType.GetFields(BindingFlags.NonPublic
+			| BindingFlags.Instance);
+			var field = fields.First(x => x.Name == "_users");
+			var dic = (ConcurrentDictionary<WebSocket, User>)field.GetValue(_handler)!;
+			Assert.That(dic.Count > 0);
+
+			await _handler.OnDisconnected(_webSocket.Object);
+		}
+
+		[Test]
+		public async Task OnConnected_SocketGetsAdded()
+		{
+			_webSocket.Setup(x => x.State).Returns(WebSocketState.Open);
+
+			await _handler.OnConnected(_webSocket.Object);
+
+			var handlerType = typeof(WebSocketHandler);
+			var fields = handlerType.GetFields(BindingFlags.NonPublic
+			| BindingFlags.Instance);
+			var field = fields.First(x => x.Name == "<WebSocketConnectionManager>k__BackingField");
+			var cm = (ConnectionManager) field.GetValue(_handler)!;
+			Assert.That(cm.GetAll().Count > 0);
+
+			await _handler.OnDisconnected(_webSocket.Object);
 		}
 	}
 }

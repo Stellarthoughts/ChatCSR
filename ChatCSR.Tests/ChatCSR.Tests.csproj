@@ -23,4 +23,8 @@
     <ProjectReference Include="..\ServiceServer\ChatCSR.ServiceServer.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Client\" />
+  </ItemGroup>
+
 </Project>
