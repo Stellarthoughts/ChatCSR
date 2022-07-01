@@ -21,6 +21,7 @@ namespace ChatCSR.WebServer
 			{
 				options.UseSqlite(Configuration.GetConnectionString("Default"));
 			});
+			services.AddScoped<IRepository, Repository>();
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -29,9 +30,6 @@ namespace ChatCSR.WebServer
 			app.UseWebSockets();
 			app.MapWebSocketManager("/message", serviceProvider.GetService<ChatMessageHandler>()!);
 			app.UseStaticFiles();
-
-			var repository = new Repository();
-			repository.Initialize(serviceProvider);
 		}
 
 	}

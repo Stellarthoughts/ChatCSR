@@ -9,6 +9,6 @@ namespace ChatCSR.ServerLogic.DB
 		void Insert(MessageEntity message);
 		void Update(MessageEntity message);
 		void Delete(int MessageID);
-		void Save();
+		Task Save();
 	}
 }

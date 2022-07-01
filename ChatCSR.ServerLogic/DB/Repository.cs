@@ -9,27 +9,22 @@ namespace ChatCSR.ServerLogic.DB
 		private ChatContext _chatContext = null!;
 		private bool _disposed;
 
-		public Repository()
+		public Repository(IServiceProvider serviceProvider)
 		{
-			_disposed = false;
-		}
-
-		public void Initialize(IServiceProvider serviceProvider)
-		{
-			using var context = new ChatContext(
+			var context = new ChatContext(
 				serviceProvider.GetRequiredService<DbContextOptions<ChatContext>>());
 			_chatContext = context;
-			//context.Database.Migrate();
 			DBContextSeeder.Seed(_chatContext);
+			_disposed = false;
 		}
 
 		public ChatContext GetContext() => _chatContext;
 
-		private List<MessageEntity> Messages => _chatContext.MessageEntities!.ToList();
+		private DbSet<MessageEntity> Messages => _chatContext.MessageEntities!;
 
 		public IEnumerable<MessageEntity> GetAll()
 		{
-			return Messages;
+			return Messages.ToList();
 		}
 
 		public MessageEntity GetById(int MessageID)
@@ -53,19 +48,6 @@ namespace ChatCSR.ServerLogic.DB
 			Messages.Remove(msg);
 		}
 
-		public void Save() => _chatContext.SaveChanges();
-
-		private void Dispose(bool disposing)
-		{
-			if (!_disposed && disposing) _chatContext.Dispose();
-
-			_disposed = true;
-		}
-
-		public void Dispose()
-		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
+		public async Task Save() => _chatContext.SaveChanges();
 	}
 }

@@ -10,13 +10,13 @@ namespace ChatCSR.ServerLogic.Handlers
 {
 	public class ChatMessageHandler : WebSocketHandler
 	{
-		private readonly Repository _repository;
+		private readonly IRepository _repository;
 		private readonly ConcurrentDictionary<WebSocket, User> _users;
 
-		public ChatMessageHandler(ConnectionManager webSocketConnectionManager, IRepository repository = null!) : base(webSocketConnectionManager)
+		public ChatMessageHandler(ConnectionManager webSocketConnectionManager, IRepository repository) : base(webSocketConnectionManager)
 		{
 			_users = new();
-			_repository ??= new Repository();
+			_repository = repository;
 		}
 
 		public override async Task OnConnected(WebSocket socket)
@@ -44,16 +44,16 @@ namespace ChatCSR.ServerLogic.Handlers
 		public override async Task ReceiveAsync(WebSocket socket, WebSocketReceiveResult result, byte[] buffer)
 		{
 			ClientMessage msg = JsonConvert.DeserializeObject<ClientMessage>(Encoding.UTF8.GetString(buffer, 0, result.Count))!;
-			HandleDB(msg);
+			await HandleDB(msg);
 			await Reply(socket, msg);
 		}
 
-		private void HandleDB(ClientMessage message)
+		private async Task HandleDB(ClientMessage message)
 		{
 			if (message.Type == MessageType.Chat)
 			{
 				_repository.Insert(new(message.Content, message.Sender));
-				_repository.Save();
+				await _repository.Save();
 			}
 		}
 
