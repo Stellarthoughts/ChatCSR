@@ -96,10 +96,7 @@ namespace ChatCSR.DesktopClient.Services
 
 		private void InterpretMessage(string message)
 		{
-			ServerMessage? msg = JsonConvert.DeserializeObject<ServerMessage>(message);
-
-			if (msg == null)
-				throw new Exception();
+			ServerMessage msg = JsonConvert.DeserializeObject<ServerMessage>(message)!;
 
 			switch (msg.Type)
 			{

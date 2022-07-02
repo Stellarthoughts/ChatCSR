@@ -11,12 +11,12 @@ namespace ChatCSR.DesktopClient.ViewModels
 	public class MainWindowViewModel : BindableBase
 	{
 		#region Fields
-		private string _serverIP = "";
-		private string _serverPort = "";
-		private string _username = "";
-		private string _connectionStatus = "";
+		private string _serverIP = string.Empty;
+		private string _serverPort = string.Empty;
+		private string _username = string.Empty;
+		private string _connectionStatus = string.Empty;
 
-		private string _messageInput = "";
+		private string _messageInput = string.Empty;
 
 		private ObservableCollection<string> _messageList = new();
 		private ObservableCollection<string> _userList = new();

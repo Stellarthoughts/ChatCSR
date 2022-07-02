@@ -14,7 +14,6 @@ namespace ServiceServer
 
 #pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
 		protected override async Task ExecuteAsync(CancellationToken stoppingToken)
-
 		{
 			if (_processInfo != null)
 				_process = Process.Start(_processInfo);
